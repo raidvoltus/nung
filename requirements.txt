@@ -1,0 +1,8 @@
+pandas
+numpy
+yfinance
+ta
+tensorflow
+scikit-learn
+lightgbm
+requests
