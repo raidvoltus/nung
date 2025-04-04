@@ -1,0 +1,46 @@
+name: Nung Trading Bot
+
+on:
+  schedule:
+    - cron: '0 7 * * 1-5'  # Setiap hari kerja pukul 14:00 WIB (07:00 UTC)
+  workflow_dispatch:        # Bisa dijalankan manual juga via GitHub UI
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30     # Timeout maksimal 30 menit
+
+    env:
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Jalankan Bot Trading
+        run: python main.py
+
+      - name: Upload Semua Data untuk Pembelajaran & Backup
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: hasil-bot-trading
+          path: |
+            data/*.csv
+            data/*.json
+            data/*.db
+            data/*.log
+            models/*.pkl
+            models/*.h5
+            models/*.joblib
