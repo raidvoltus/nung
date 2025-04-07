@@ -10,7 +10,9 @@ from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout
 from keras.callbacks import EarlyStopping
 from keras.models import load_model
-
+if not os.path.exists("data/historical_data.csv"):
+    os.system("python generate_dummy_data.py")
+    
 logging.basicConfig(level=logging.INFO)
 
 def create_target(df):
