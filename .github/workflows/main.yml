@@ -30,12 +30,16 @@ jobs:
 
       - name: Cek dan Training Model Jika Belum Ada
         run: |
-          if [ ! -f "models/lightgbm_model.pkl" ] || [ ! -f "models/lstm_model.h5" ]; then
-            echo "⚠️ Model belum ditemukan. Training sekarang..."
-            python train_model.py
+          if [ -f "data/historical_data.csv" ]; then
+            if [ ! -f "models/lightgbm_model.pkl" ] || [ ! -f "models/lstm_model.h5" ]; then
+              echo "⚠️ Model belum ditemukan. Training sekarang..."
+              python train_model.py
+            else
+              echo "✅ Model sudah tersedia, lanjut ke eksekusi bot."
+            fi
           else
-            echo "✅ Model sudah tersedia, lanjut ke eksekusi bot."
-          fi
+            echo "❌ File data/historical_data.csv tidak ditemukan. Training dibatalkan."
+            exit 1
 
       - name: Jalankan bot
         run: |
