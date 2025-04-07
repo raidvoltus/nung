@@ -1,8 +1,9 @@
 pandas
 numpy
-yfinance
-ta
-tensorflow
 scikit-learn
 lightgbm
-requests
+tensorflow==2.14.0
+yfinance
+ta
+python-telegram-bot==13.15
+sqlalchemy
