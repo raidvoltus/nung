@@ -25,7 +25,13 @@ class StockDataFetcher:
 
         df = df.dropna()
         return df
-
+        
+    def get_complete_data(self, symbol):
+        df = self.fetch(symbol)
+        df = calculate_indicators(df)
+        df['Symbol'] = symbol
+        return df
+        
 def download_data(symbol, period='6mo', interval='1h'):
     filename = f'data/{symbol}_data.csv'
     if os.path.exists(filename):
