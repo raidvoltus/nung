@@ -4,7 +4,9 @@ from train_model import train_lightgbm_model
 from model_predictor import predict_signal
 from signal_handler import send_signal_to_telegram
 from data_fetcher import download_data, calculate_indicators
-
+if not os.path.exists("data/historical_data.csv"):
+    os.system("python generate_dummy_data.py")
+    
 # Daftar saham yang akan dianalisis
 STOCK_LIST = [
     "ACES.JK", "ADMR.JK", "ADRO.JK", "AKRA.JK", "AMMN.JK", "AMRT.JK", "ANTM.JK",
