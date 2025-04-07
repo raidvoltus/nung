@@ -33,7 +33,7 @@ jobs:
           python main.py
 
       - name: Upload Hasil & Data Pembelajaran
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@main
         with:
           name: hasil-bot-trading
           path: |
