@@ -64,6 +64,12 @@ def train_models():
     df = pd.read_csv('data/historical_data.csv')
 
     if df.empty:
+        logging.error("❌ File CSV kosong. Tidak ada data untuk training.")
+        return
+    else:
+        logging.info(f"✅ Data ditemukan. Jumlah baris: {len(df)}")
+        logging.info(f"📊 5 baris pertama:\n{df.head()}")
+    if df.empty:
         raise ValueError("❌ File CSV kosong. Tidak ada data untuk training.")
 
     if 'Datetime' in df.columns:
