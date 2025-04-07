@@ -9,7 +9,11 @@ from sklearn.feature_selection import SelectFromModel
 
 os.makedirs("models", exist_ok=True)
 
-data = pd.read_csv("data/historical_data.csv")
+data_path = "data/historical_data.csv"
+if not os.path.exists(data_path):
+    raise FileNotFoundError(f"❌ File data tidak ditemukan: {data_path}")
+
+data = pd.read_csv(data_path)
 X = data.drop(columns=["Target"])
 y = data["Target"]
 
