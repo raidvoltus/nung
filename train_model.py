@@ -55,7 +55,7 @@ lstm_model.add(LSTM(64, input_shape=(1, X_train.shape[1]), return_sequences=Fals
 lstm_model.add(Dense(1, activation='sigmoid'))
 
 lstm_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-lstm_model.fit(X_train_lstm, y_train, epochs=10, batch_size=32, verbose=1)
+lstm_model.fit(X_train_lstm, y_train, epochs=55, batch_size=32, verbose=1)
 
 lstm_model.save("models/lstm_model.h5")
 logging.info("✅ Model LSTM berhasil disimpan.")
