@@ -23,19 +23,26 @@ class StockDataFetcher:
         return df
 
     def save_all_to_csv(self, output_path):
-        all_data = []
-        for ticker in self.tickers:
-            df = self.get_complete_data(ticker)
-            if df is not None:
-                df["Ticker"] = ticker
-                all_data.append(df)
-        if all_data:
-            combined_df = pd.concat(all_data)
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            combined_df.to_csv(output_path)
-            print(f"\n✅ Data historis berhasil disimpan ke {output_path}")
-        else:
-            print("❌ Tidak ada data yang berhasil diambil.")
+    all_data = []
+
+    for ticker in self.tickers:
+        print(f"\n🔄 Ambil data {ticker} dari Yahoo Finance...")
+        df = self.get_complete_data(ticker)
+        
+        # Skip jika data kosong
+        if df is None or df.empty:
+            print(f"⚠️ Data kosong untuk {ticker}, dilewati.")
+            continue
+
+        df["Ticker"] = ticker
+        all_data.append(df)
+
+    if all_data:
+        full_data = pd.concat(all_data)
+        full_data.to_csv(output_path)
+        print(f"\n✅ Data historis berhasil disimpan ke {output_path}")
+    else:
+        print(f"\n❌ Tidak ada data historis yang berhasil diambil. File tidak dibuat.")
 
 
 def calculate_indicators(df):
