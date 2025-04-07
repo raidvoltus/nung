@@ -2,7 +2,7 @@ pandas
 numpy
 scikit-learn
 lightgbm
-tensorflow==2.14.0
+tensorflow==2.15.0
 yfinance
 ta
 python-telegram-bot==13.15
