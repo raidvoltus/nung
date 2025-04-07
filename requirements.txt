@@ -1,7 +1,7 @@
 pandas
 numpy
 scikit-learn
-lightgbm
+lightgbm>=3.3.5
 tensorflow==2.15.0
 yfinance
 ta
