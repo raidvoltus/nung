@@ -6,6 +6,8 @@ import logging
 import pandas as pd
 from datetime import datetime, timedelta
 
+logging.basicConfig(level=logging.INFO)
+
 class StockDataFetcher:
     def __init__(self):
         self.cache_dir = "data/cache/"
@@ -24,8 +26,6 @@ class StockDataFetcher:
         
         df = df.dropna()
         return df
-        
-logging.basicConfig(level=logging.INFO)
 
 def download_data(symbol, period='6mo', interval='1h'):
     filename = f'data/{symbol}_data.csv'
