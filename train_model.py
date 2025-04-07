@@ -61,9 +61,18 @@ def train_models():
         logging.error("❌ File data/historical_data.csv tidak ditemukan.")
         return
 
-    df = pd.read_csv('data/historical_data.csv', parse_dates=['Datetime'], index_col='Datetime')
-    df = create_target(df)
-    X, y = load_features_targets(df)
+    df = pd.read_csv('data/historical_data.csv')
+
+# Validasi isi file
+if df.empty:
+    raise ValueError("❌ File CSV kosong. Tidak ada data untuk training.")
+
+# Validasi kolom Datetime
+if 'Datetime' in df.columns:
+    df['Datetime'] = pd.to_datetime(df['Datetime'])
+    df.set_index('Datetime', inplace=True)
+else:
+    raise ValueError("❌ Kolom 'Datetime' tidak ditemukan di file CSV.")
 
     # Standarisasi fitur
     scaler = StandardScaler()
