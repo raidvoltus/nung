@@ -55,13 +55,13 @@ def calculate_indicators(df):
     df['EMA_10'] = df['Close'].ewm(span=10, adjust=False).mean()
 
     # Relative Strength Index (RSI)
-    delta = df['Close'].diff()
-    gain = np.where(delta > 0, delta, 0)
-    loss = np.where(delta < 0, -delta, 0)
-    avg_gain = pd.Series(gain).rolling(window=14).mean()
-    avg_loss = pd.Series(loss).rolling(window=14).mean()
-    rs = avg_gain / (avg_loss + 1e-10)
-    df['RSI_14'] = 100 - (100 / (1 + rs))
+delta = df['Close'].diff()
+gain = pd.Series(np.where(delta > 0, delta, 0), index=df.index)
+loss = pd.Series(np.where(delta < 0, -delta, 0), index=df.index)
+avg_gain = gain.rolling(window=14).mean()
+avg_loss = loss.rolling(window=14).mean()
+rs = avg_gain / (avg_loss + 1e-10)
+df['RSI_14'] = 100 - (100 / (1 + rs))
 
     # MACD
     ema_12 = df['Close'].ewm(span=12, adjust=False).mean()
