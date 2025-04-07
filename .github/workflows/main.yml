@@ -28,12 +28,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Cek dan Training Model Jika Belum Ada
+        run: |
+          if [ ! -f "models/lightgbm_model.pkl" ] || [ ! -f "models/lstm_model.h5" ]; then
+            echo "⚠️ Model belum ditemukan. Training sekarang..."
+            python train_model.py
+          else
+            echo "✅ Model sudah tersedia, lanjut ke eksekusi bot."
+          fi
+
       - name: Jalankan bot
         run: |
           python main.py
 
-      - name: Upload Hasil & Data Pembelajaran
-        uses: actions/upload-artifact@main
+      - name: Upload Hasil & Model
+        uses: actions/upload-artifact@v3
         with:
           name: hasil-bot-trading
           path: |
