@@ -3,7 +3,28 @@ import numpy as np
 import os
 import yfinance as yf
 import logging
+import pandas as pd
+from datetime import datetime, timedelta
 
+class StockDataFetcher:
+    def __init__(self):
+        self.cache_dir = "data/cache/"
+        os.makedirs(self.cache_dir, exist_ok=True)
+
+    def fetch(self, symbol, period="6mo", interval="1h"):
+        cache_path = f"{self.cache_dir}{symbol}_{interval}.csv"
+        
+        if os.path.exists(cache_path):
+            df = pd.read_csv(cache_path, parse_dates=True, index_col=0)
+            print(f"🟢 {symbol} dari cache.")
+        else:
+            print(f"🔄 Ambil data {symbol} dari Yahoo Finance...")
+            df = yf.download(symbol, period=period, interval=interval)
+            df.to_csv(cache_path)
+        
+        df = df.dropna()
+        return df
+        
 logging.basicConfig(level=logging.INFO)
 
 def download_data(symbol, period='6mo', interval='1h'):
