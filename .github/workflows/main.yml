@@ -42,7 +42,7 @@ jobs:
           python main.py
 
       - name: Upload Hasil & Model
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: hasil-bot-trading
           path: |
