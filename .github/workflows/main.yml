@@ -44,7 +44,7 @@ jobs:
         run: python main.py
 
       - name: ⬆️ Upload sinyal trading
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: trading_signals
           path: data/trading_signals.csv
