@@ -58,9 +58,10 @@ def calculate_indicators(df):
     df["Signal"] = df["MACD"].ewm(span=9, adjust=False).mean()
 
     # Bollinger Bands
-    df["BB_Middle"] = df["SMA_20"]
-    df["BB_Upper"] = df["BB_Middle"] + 2 * df["Close"].rolling(window=20).std()
-    df["BB_Lower"] = df["BB_Middle"] - 2 * df["Close"].rolling(window=20).std()
+    df["BB_Middle"] = df["Close"].rolling(window=20).mean()
+    bb_std = df["Close"].rolling(window=20).std().squeeze()
+    df["BB_Upper"] = df["BB_Middle"] + 2 * bb_std
+    df["BB_Lower"] = df["BB_Middle"] - 2 * bb_std
 
     # Stochastic Oscillator
     low_14 = df["Low"].rolling(window=14).min()
