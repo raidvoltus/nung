@@ -21,7 +21,12 @@ def prepare_features(df):
         'Fibo_0.236', 'Fibo_0.382', 'Fibo_0.5', 'Fibo_0.618', 'Fibo_0.786'
     ]
     df = df.dropna(subset=feature_cols)
-    latest = df.iloc[-1:][feature_cols]
+    latest = df.iloc[-1:][feature_cols].copy()
+
+    # Pastikan latest berbentuk 2D array dengan shape (1, n_features)
+    if isinstance(latest, pd.Series):
+        latest = latest.to_frame().T
+
     return latest, df
 
 def predict_signal(df):
