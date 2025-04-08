@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 from data_fetcher import fetch_data_with_indicators
 from model_predictor import predict_signal
-from signal_handler import kirim_sinyal_telegram
+from signal_handler import send_signal_to_telegram
 from train_model import retrain_model
 
 print("\n🚀 Mulai Bot Trading AI untuk Day Trading\n")
