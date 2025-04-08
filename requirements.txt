@@ -5,4 +5,4 @@ joblib
 requests
 numpy
 pandas
-ta
+scikit-learn
