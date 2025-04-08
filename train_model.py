@@ -12,7 +12,35 @@ from keras.callbacks import EarlyStopping
 from keras.models import load_model
 if not os.path.exists("data/historical_data.csv"):
     os.system("python generate_dummy_data.py")
-    
+from lightgbm import LGBMClassifier
+from sklearn.model_selection import train_test_split
+
+def train_lightgbm_model(df):
+    # Pastikan ada kolom target
+    if 'Target' not in df.columns:
+        # Buat target dummy biner: 1 jika harga naik, 0 jika turun
+        df['Target'] = (df['Close'].shift(-1) > df['Close']).astype(int)
+
+    # Drop kolom tidak relevan
+    X = df.drop(columns=['Datetime', 'Target'], errors='ignore')
+    y = df['Target']
+
+    # Handle NaN dan infinitif
+    X = X.replace([np.inf, -np.inf], np.nan).fillna(0)
+
+    # Split data
+    X_train, _, y_train, _ = train_test_split(X, y, test_size=0.2, shuffle=False)
+
+    # Model LightGBM
+    model = LGBMClassifier(n_estimators=100, learning_rate=0.05)
+    model.fit(X_train, y_train)
+
+    # Simpan model ke file
+    os.makedirs("models", exist_ok=True)
+    joblib.dump(model, "models/lightgbm_model.pkl")
+
+    print("✅ Model LightGBM selesai dilatih dan disimpan.")
+    return model
 logging.basicConfig(level=logging.INFO)
 
 def create_target(df):
