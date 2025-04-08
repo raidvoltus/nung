@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 # =========================
 # Parameter dan Symbol
 # =========================
-symbols = ['BBRI', 'TLKM', 'BBCA', 'BMRI', 'ASII', 'ANTM', 'BRIS', 'SIDO', 'UNVR', 'MDKA']
+symbols = ['BBRI.JK', 'TLKM.JK', 'BBCA.JK', 'BMRI.JK', 'ASII.JK', 'ANTM.JK', 'BRIS.JK', 'SIDO.JK', 'UNVR.JK', 'MDKA.JK']
 
 # =========================
 # Cek model, training jika belum ada
