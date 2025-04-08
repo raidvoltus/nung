@@ -72,6 +72,9 @@ def retrain_model(df, symbol):
     # Standardisasi
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
+
+    # Pastikan direktori ada sebelum simpan
+    os.makedirs("data/models", exist_ok=True)
     joblib.dump(scaler, f"data/models/{symbol}_scaler.pkl")
 
     X_train, _, y_train, _ = train_test_split(X_scaled, y, test_size=0.2, shuffle=False)
