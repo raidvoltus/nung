@@ -5,6 +5,8 @@ import numpy as np
 def fetch_stock_data(symbol: str, period: str = "6mo", interval: str = "1h") -> pd.DataFrame:
     df = yf.download(symbol, period=period, interval=interval, auto_adjust=True, progress=False)
 
+if df.empty:
+    raise ValueError(f"Tidak ada data yang tersedia untuk {symbol} dengan periode={period} dan interval={interval}")
     # Handle jika kolom hasil download berbentuk MultiIndex
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.get_level_values(0)
