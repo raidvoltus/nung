@@ -3,8 +3,20 @@ import pandas as pd
 import numpy as np
 
 def fetch_stock_data(symbol: str, period: str = "6mo", interval: str = "1h") -> pd.DataFrame:
-    df = yf.download(symbol, period=period, interval=interval)
+    df = yf.download(symbol, period=period, interval=interval, auto_adjust=True, progress=False)
+
+    # Handle jika kolom hasil download berbentuk MultiIndex
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+
     df.dropna(inplace=True)
+
+    # Validasi kolom penting
+    required_cols = ["Open", "High", "Low", "Close", "Volume"]
+    for col in required_cols:
+        if col not in df.columns:
+            raise ValueError(f"Data dari {symbol} tidak memiliki kolom '{col}'")
+
     df["Symbol"] = symbol
     df.reset_index(inplace=True)
 
