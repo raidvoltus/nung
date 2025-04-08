@@ -26,6 +26,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Generate Dummy Data
+        run: python generate_dummy_data.py
+
       - name: 📥 Generate historical data (jika belum ada)
         run: |
           if [ ! -f "data/historical_data.csv" ]; then
