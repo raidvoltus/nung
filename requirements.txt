@@ -1,8 +1,8 @@
 pandas
 numpy
-scikit-learn
+yfinance
 tensorflow
 keras
+lightgbm
+scikit-learn
 joblib
-yfinance
-python-telegram-bot
