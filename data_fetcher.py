@@ -20,12 +20,12 @@ def calculate_indicators(df):
     df['EMA_5'] = df['Close'].ewm(span=5, adjust=False).mean()
     df['EMA_10'] = df['Close'].ewm(span=10, adjust=False).mean()
 
-    # RSI
+    # RSI - perbaikan agar 1D dan sinkron dengan df
     delta = df['Close'].diff()
     gain = np.where(delta > 0, delta, 0)
     loss = np.where(delta < 0, -delta, 0)
-    avg_gain = pd.Series(gain).rolling(window=14).mean()
-    avg_loss = pd.Series(loss).rolling(window=14).mean()
+    avg_gain = pd.Series(gain, index=df.index).rolling(window=14).mean()
+    avg_loss = pd.Series(loss, index=df.index).rolling(window=14).mean()
     rs = avg_gain / (avg_loss + 1e-10)
     df['RSI_14'] = 100 - (100 / (1 + rs))
 
@@ -89,4 +89,8 @@ def calculate_indicators(df):
 
     df.drop(['H-L', 'H-PC', 'L-PC', 'BB_Std'], axis=1, inplace=True, errors='ignore')
     df.dropna(inplace=True)
+    # Pastikan semua kolom 1D scalar, bukan array
+for col in df.columns:
+    if isinstance(df[col].iloc[-1], (np.ndarray, list)):
+        df[col] = df[col].apply(lambda x: x[0] if isinstance(x, (np.ndarray, list)) else x)
     return df
