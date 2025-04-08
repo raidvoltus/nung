@@ -30,40 +30,49 @@ def prepare_features(df):
     return latest, df
 
 def predict_signal(df):
-    if len(df) < 60:
-        return {"predict_up_prob": 0, "recommendation": "NO DATA", "send_signal": False}
-
     lgb_model, lstm_model, scaler = load_models()
     latest_features, full_df = prepare_features(df)
 
-    X_scaled = scaler.transform(latest_features)
+    # Ubah ke numpy array dan pastikan bentuknya (1, n_features)
+    X = latest_features.values.reshape(1, -1)
 
+    # Scaling
+    X_scaled = scaler.transform(X)
+
+    # LightGBM predict_proba expects 2D array
     lgb_pred = lgb_model.predict_proba(X_scaled)[0][1]
+
+    # LSTM expects 3D array: (samples, timesteps, features)
     lstm_input = np.reshape(X_scaled, (X_scaled.shape[0], 1, X_scaled.shape[1]))
-    lstm_pred = lstm_model.predict(lstm_input, verbose=0)[0][0]
+    lstm_pred = lstm_model.predict(lstm_input)[0][0]
 
     final_prob = (lgb_pred + lstm_pred) / 2
 
+    signal = {
+        "predict_up_prob": final_prob,
+        "recommendation": "BUY" if final_prob >= 0.75 else "NO TRADE"
+    }
+
+    # Take profit dan stop loss otomatis
     last_close = df['Close'].iloc[-1]
     atr = df['ATR_14'].iloc[-1]
-    if atr < 1e-5: atr = 0.1
-
     res_level = df['High'].rolling(window=20).max().iloc[-1]
     sup_level = df['Low'].rolling(window=20).min().iloc[-1]
 
     take_profit = min(last_close + 2 * atr, res_level)
     stop_loss = max(last_close - atr, sup_level)
-
     rr_ratio = (take_profit - last_close) / (last_close - stop_loss + 1e-10)
 
-    signal = {
-        "predict_up_prob": round(final_prob, 4),
-        "recommendation": "BUY" if final_prob >= 0.75 else "NO TRADE",
+    signal.update({
         "last_close": round(last_close, 2),
         "take_profit": round(take_profit, 2),
         "stop_loss": round(stop_loss, 2),
-        "risk_reward": round(rr_ratio, 2),
-        "send_signal": final_prob >= 0.75 and rr_ratio >= 1.5
-    }
+        "risk_reward": round(rr_ratio, 2)
+    })
+
+    if final_prob >= 0.75 and rr_ratio >= 1.5:
+        signal["send_signal"] = True
+    else:
+        signal["send_signal"] = False
 
     return signal
