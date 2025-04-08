@@ -1,8 +1,0 @@
-yfinance
-lightgbm
-tensorflow
-joblib
-requests
-numpy
-pandas
-scikit-learn
