@@ -4,7 +4,11 @@ from train_model import train_lightgbm_model
 from model_predictor import predict_signal
 from signal_handler import send_signal_to_telegram
 from data_fetcher import download_data, calculate_indicators
-if not os.path.exists("data/historical_data.csv"):
+import logging
+
+# Cek jika file tidak ada atau kosong
+if not os.path.exists('data/historical_data.csv') or os.stat('data/historical_data.csv').st_size == 0:
+    logging.warning("⚠️ File historical_data.csv kosong atau tidak ditemukan. Menjalankan generate_dummy_data.py...")
     os.system("python generate_dummy_data.py")
     
 # Daftar saham yang akan dianalisis
