@@ -1,9 +1,8 @@
 pandas
 numpy
 scikit-learn
-lightgbm>=3.3.5
-tensorflow==2.15.0
+tensorflow
+keras
+joblib
 yfinance
-ta
-python-telegram-bot==13.15
-sqlalchemy
+python-telegram-bot
