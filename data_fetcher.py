@@ -95,3 +95,8 @@ def calculate_indicators(df):
             df[col] = df[col].apply(lambda x: x[0] if isinstance(x, (np.ndarray, list)) else x)
 
     return df
+    # Tambahkan di bagian paling bawah file data_fetcher.py
+def fetch_data_with_indicators(symbol):
+    df = download_data(symbol)
+    df = calculate_indicators(df)
+    return df
