@@ -14,7 +14,7 @@ from model_predictor import create_features, create_lstm_sequences
 # =========================
 # Cek / Fetch Data
 # =========================
-symbols = ['BBRI', 'TLKM', 'BBCA', 'BMRI', 'ASII', 'ANTM', 'BRIS', 'SIDO', 'UNVR', 'MDKA']
+symbols = ['BBRI.JK', 'TLKM.JK', 'BBCA.JK', 'BMRI.JK', 'ASII.JK', 'ANTM.JK', 'BRIS.JK', 'SIDO.JK', 'UNVR.JK', 'MDKA.JK']
 df = fetch_all_stock_data(symbols)
 
 # Save CSV untuk backup
