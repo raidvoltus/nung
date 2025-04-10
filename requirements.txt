@@ -1,8 +1,9 @@
-pandas
-numpy
 yfinance
-tensorflow
-keras
 lightgbm
-scikit-learn
+tensorflow
 joblib
+requests
+numpy
+pandas
+ta
+scikit-learn
