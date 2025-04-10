@@ -25,7 +25,7 @@ jobs:
         pip install yfinance lightgbm tensorflow joblib requests numpy pandas ta
 
     - name: Run analysis script
-      run: python your_script_name.py
+      run: python main.py
 
     - name: Commit and push changes
       run: |
