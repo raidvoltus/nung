@@ -1,0 +1,39 @@
+name: Run Stock Analysis Script
+
+on:
+  schedule:
+    # 12:30 WIB = 05:30 UTC
+    - cron: '30 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install yfinance lightgbm tensorflow joblib requests numpy pandas ta
+
+    - name: Run analysis script
+      run: python your_script_name.py
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add stock_data_backup.csv
+        git commit -m "Update stock data at $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git push
+      env:
+        # Akses token agar bisa push
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
